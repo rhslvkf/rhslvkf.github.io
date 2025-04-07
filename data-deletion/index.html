@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터 삭제 요청</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>데이터 삭제 요청</h1>
+    <p>앱에서 귀하의 데이터 삭제를 요청하려면 아래 양식을 작성해주세요.</p>
+    
+    <form action="https://formsubmit.co/여기에실제이메일주소입력" method="POST">
+        <div class="form-group">
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" name="nickname" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="device_id">디바이스 ID (알고 있는 경우)</label>
+            <input type="text" id="device_id" name="device_id">
+        </div>
+        
+        <button type="submit">삭제 요청 제출</button>
+        
+        <!-- FormSubmit 설정 -->
+        <input type="hidden" name="_subject" value="앱 데이터 삭제 요청">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://rhslvkf.github.io/data-deletion/thanks.html">
+    </form>
+</body>
+</html>
