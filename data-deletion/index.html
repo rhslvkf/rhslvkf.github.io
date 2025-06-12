@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>계정 삭제 요청</title>
+    <title>Account Deletion Request</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,6 +19,36 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .lang-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background-color: #4285f4;
+            color: white;
+            border-color: #4285f4;
+        }
+        
+        .lang-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .lang-btn.active:hover {
+            background-color: #3367d6;
         }
         
         h1 {
@@ -84,7 +114,7 @@
             margin-top: 5px;
         }
         
-        button {
+        button[type="submit"] {
             background-color: #dc3545;
             color: white;
             padding: 12px 24px;
@@ -97,7 +127,7 @@
             width: 100%;
         }
         
-        button:hover {
+        button[type="submit"]:hover {
             background-color: #c82333;
         }
         
@@ -122,70 +152,183 @@
 </head>
 <body>
     <div class="container">
-        <h1>계정 삭제 요청</h1>
+        <div class="language-toggle">
+            <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+            <button class="lang-btn" onclick="setLanguage('ko')">한국어</button>
+        </div>
+        
+        <h1 id="title">Account Deletion Request</h1>
         
         <div class="description">
-            <strong>계정 삭제 안내</strong><br>
-            앱에서 계정을 완전히 삭제하려면 아래 양식을 작성해 주세요. 삭제된 데이터는 복구할 수 없으며, 처리까지 최대 30일이 소요될 수 있습니다.
+            <strong id="guide-title">Account Deletion Guide</strong><br>
+            <span id="guide-text">Please fill out the form below to request complete deletion of your account from the app. Deleted data cannot be recovered, and processing may take up to 30 days.</span>
         </div>
         
         <div class="warning">
-            ⚠️ <strong>주의:</strong> 계정 삭제 시 모든 데이터가 영구적으로 삭제되며 복구가 불가능합니다.
+            <span id="warning-text">⚠️ <strong>Warning:</strong> Account deletion will permanently delete all data and cannot be undone.</span>
         </div>
         
         <form action="https://formsubmit.co/rhslvkf@gmail.com" method="POST">
             <div class="form-group">
-                <label for="account_type">계정 타입 <span class="required">*</span></label>
+                <label for="account_type" id="account-type-label">Account Type <span class="required">*</span></label>
                 <select id="account_type" name="account_type" required onchange="updateAccountInfo()">
-                    <option value="">선택해 주세요</option>
-                    <option value="google">구글 로그인</option>
-                    <option value="apple">애플 로그인</option>
-                    <option value="guest">게스트 계정</option>
+                    <option value="" id="select-option">Please select</option>
+                    <option value="google" id="google-option">Google Login</option>
+                    <option value="apple" id="apple-option">Apple Login</option>
+                    <option value="guest" id="guest-option">Guest Account</option>
                 </select>
             </div>
             
             <div class="form-group">
-                <label for="account_identifier">계정 식별 정보 <span class="required">*</span></label>
-                <input type="text" id="account_identifier" name="account_identifier" required placeholder="계정 타입을 먼저 선택해 주세요">
+                <label for="account_identifier" id="account-identifier-label">Account Identifier <span class="required">*</span></label>
+                <input type="text" id="account_identifier" name="account_identifier" required placeholder="Please select account type first">
                 <div class="account-info" id="account_info" style="display: none;">
                     <div class="help-text" id="help_text"></div>
                 </div>
             </div>
             
             <div class="form-group">
-                <label for="device_id">디바이스 ID (선택사항)</label>
-                <input type="text" id="device_id" name="device_id" placeholder="알고 있는 경우 입력해 주세요">
-                <div class="help-text">앱 설정에서 확인할 수 있습니다. 계정 식별에 도움이 됩니다.</div>
+                <label for="device_id" id="device-id-label">Device ID (Optional)</label>
+                <input type="text" id="device_id" name="device_id" placeholder="Enter if known">
+                <div class="help-text" id="device-help">You can find this in app settings. It helps with account identification.</div>
             </div>
             
             <div class="form-group">
-                <label for="deletion_reason">삭제 사유 (선택사항)</label>
-                <textarea id="deletion_reason" name="deletion_reason" placeholder="계정을 삭제하는 이유를 알려주시면 서비스 개선에 도움이 됩니다."></textarea>
+                <label for="deletion_reason" id="deletion-reason-label">Reason for Deletion (Optional)</label>
+                <textarea id="deletion_reason" name="deletion_reason" placeholder="Please let us know why you're deleting your account. This helps us improve our service."></textarea>
             </div>
             
             <div class="form-group">
-                <label for="additional_info">추가 정보 (선택사항)</label>
-                <textarea id="additional_info" name="additional_info" placeholder="계정 식별에 도움이 될 수 있는 추가 정보가 있다면 입력해 주세요."></textarea>
+                <label for="additional_info" id="additional-info-label">Additional Information (Optional)</label>
+                <textarea id="additional_info" name="additional_info" placeholder="Please provide any additional information that might help identify your account."></textarea>
             </div>
             
-            <button type="submit">계정 삭제 요청 제출</button>
+            <button type="submit" id="submit-btn">Submit Account Deletion Request</button>
             
             <!-- FormSubmit 설정 -->
-            <input type="hidden" name="_subject" value="앱 계정 삭제 요청">
+            <input type="hidden" name="_subject" value="App Account Deletion Request">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://rhslvkf.github.io/data-deletion/thanks.html">
         </form>
     </div>
 
     <script>
+        const translations = {
+            en: {
+                title: "Account Deletion Request",
+                guideTitle: "Account Deletion Guide",
+                guideText: "Please fill out the form below to request complete deletion of your account from the app. Deleted data cannot be recovered, and processing may take up to 30 days.",
+                warningText: "⚠️ <strong>Warning:</strong> Account deletion will permanently delete all data and cannot be undone.",
+                accountTypeLabel: "Account Type <span class=\"required\">*</span>",
+                selectOption: "Please select",
+                googleOption: "Google Login",
+                appleOption: "Apple Login",
+                guestOption: "Guest Account",
+                accountIdentifierLabel: "Account Identifier <span class=\"required\">*</span>",
+                deviceIdLabel: "Device ID (Optional)",
+                deviceHelp: "You can find this in app settings. It helps with account identification.",
+                deletionReasonLabel: "Reason for Deletion (Optional)",
+                additionalInfoLabel: "Additional Information (Optional)",
+                submitBtn: "Submit Account Deletion Request",
+                placeholders: {
+                    accountType: "Please select account type first",
+                    deviceId: "Enter if known",
+                    deletionReason: "Please let us know why you're deleting your account. This helps us improve our service.",
+                    additionalInfo: "Please provide any additional information that might help identify your account."
+                },
+                helpTexts: {
+                    google: "Please enter the email address you used to log in with your Google account.",
+                    apple: "Please enter the email address or Apple ID you used to log in with your Apple account.",
+                    guest: "For guest accounts, please enter the account identifier or device ID generated by the app. If you don't know the exact information, please provide all the information you remember in the additional information section below."
+                },
+                placeholderTexts: {
+                    google: "example@gmail.com",
+                    apple: "example@icloud.com or Apple ID",
+                    guest: "Guest account identifier"
+                }
+            },
+            ko: {
+                title: "계정 삭제 요청",
+                guideTitle: "계정 삭제 안내",
+                guideText: "앱에서 계정을 완전히 삭제하려면 아래 양식을 작성해 주세요. 삭제된 데이터는 복구할 수 없으며, 처리까지 최대 30일이 소요될 수 있습니다.",
+                warningText: "⚠️ <strong>주의:</strong> 계정 삭제 시 모든 데이터가 영구적으로 삭제되며 복구가 불가능합니다.",
+                accountTypeLabel: "계정 타입 <span class=\"required\">*</span>",
+                selectOption: "선택해 주세요",
+                googleOption: "구글 로그인",
+                appleOption: "애플 로그인",
+                guestOption: "게스트 계정",
+                accountIdentifierLabel: "계정 식별 정보 <span class=\"required\">*</span>",
+                deviceIdLabel: "디바이스 ID (선택사항)",
+                deviceHelp: "앱 설정에서 확인할 수 있습니다. 계정 식별에 도움이 됩니다.",
+                deletionReasonLabel: "삭제 사유 (선택사항)",
+                additionalInfoLabel: "추가 정보 (선택사항)",
+                submitBtn: "계정 삭제 요청 제출",
+                placeholders: {
+                    accountType: "계정 타입을 먼저 선택해 주세요",
+                    deviceId: "알고 있는 경우 입력해 주세요",
+                    deletionReason: "계정을 삭제하는 이유를 알려주시면 서비스 개선에 도움이 됩니다.",
+                    additionalInfo: "계정 식별에 도움이 될 수 있는 추가 정보가 있다면 입력해 주세요."
+                },
+                helpTexts: {
+                    google: "구글 계정으로 로그인할 때 사용한 이메일 주소를 입력해 주세요.",
+                    apple: "애플 계정으로 로그인할 때 사용한 이메일 주소나 Apple ID를 입력해 주세요.",
+                    guest: "게스트 계정의 경우 앱에서 생성된 식별 정보나 디바이스 ID를 입력해 주세요. 정확한 정보를 모르시면 아래 추가 정보란에 기억나는 정보를 모두 입력해 주세요."
+                },
+                placeholderTexts: {
+                    google: "example@gmail.com",
+                    apple: "example@icloud.com 또는 Apple ID",
+                    guest: "게스트 계정 식별 정보"
+                }
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update all text content
+            const t = translations[lang];
+            document.getElementById('title').innerText = t.title;
+            document.getElementById('guide-title').innerText = t.guideTitle;
+            document.getElementById('guide-text').innerText = t.guideText;
+            document.getElementById('warning-text').innerHTML = t.warningText;
+            document.getElementById('account-type-label').innerHTML = t.accountTypeLabel;
+            document.getElementById('select-option').innerText = t.selectOption;
+            document.getElementById('google-option').innerText = t.googleOption;
+            document.getElementById('apple-option').innerText = t.appleOption;
+            document.getElementById('guest-option').innerText = t.guestOption;
+            document.getElementById('account-identifier-label').innerHTML = t.accountIdentifierLabel;
+            document.getElementById('device-id-label').innerText = t.deviceIdLabel;
+            document.getElementById('device-help').innerText = t.deviceHelp;
+            document.getElementById('deletion-reason-label').innerText = t.deletionReasonLabel;
+            document.getElementById('additional-info-label').innerText = t.additionalInfoLabel;
+            document.getElementById('submit-btn').innerText = t.submitBtn;
+            
+            // Update placeholders
+            document.getElementById('device_id').placeholder = t.placeholders.deviceId;
+            document.getElementById('deletion_reason').placeholder = t.placeholders.deletionReason;
+            document.getElementById('additional_info').placeholder = t.placeholders.additionalInfo;
+            
+            // Update account identifier based on current selection
+            updateAccountInfo();
+        }
+
         function updateAccountInfo() {
             const accountType = document.getElementById('account_type').value;
             const accountIdentifier = document.getElementById('account_identifier');
             const accountInfo = document.getElementById('account_info');
             const helpText = document.getElementById('help_text');
+            const t = translations[currentLang];
             
             if (accountType === '') {
-                accountIdentifier.placeholder = '계정 타입을 먼저 선택해 주세요';
+                accountIdentifier.placeholder = t.placeholders.accountType;
                 accountInfo.style.display = 'none';
                 return;
             }
@@ -194,22 +337,27 @@
             
             switch(accountType) {
                 case 'google':
-                    accountIdentifier.placeholder = 'example@gmail.com';
+                    accountIdentifier.placeholder = t.placeholderTexts.google;
                     accountIdentifier.type = 'email';
-                    helpText.innerHTML = '구글 계정으로 로그인할 때 사용한 이메일 주소를 입력해 주세요.';
+                    helpText.innerHTML = t.helpTexts.google;
                     break;
                 case 'apple':
-                    accountIdentifier.placeholder = 'example@icloud.com 또는 Apple ID';
+                    accountIdentifier.placeholder = t.placeholderTexts.apple;
                     accountIdentifier.type = 'email';
-                    helpText.innerHTML = '애플 계정으로 로그인할 때 사용한 이메일 주소나 Apple ID를 입력해 주세요.';
+                    helpText.innerHTML = t.helpTexts.apple;
                     break;
                 case 'guest':
-                    accountIdentifier.placeholder = '게스트 계정 식별 정보';
+                    accountIdentifier.placeholder = t.placeholderTexts.guest;
                     accountIdentifier.type = 'text';
-                    helpText.innerHTML = '게스트 계정의 경우 앱에서 생성된 식별 정보나 디바이스 ID를 입력해 주세요. 정확한 정보를 모르시면 아래 추가 정보란에 기억나는 정보를 모두 입력해 주세요.';
+                    helpText.innerHTML = t.helpTexts.guest;
                     break;
             }
         }
+
+        // Initialize with English
+        document.addEventListener('DOMContentLoaded', function() {
+            setLanguage('en');
+        });
     </script>
 </body>
 </html>
