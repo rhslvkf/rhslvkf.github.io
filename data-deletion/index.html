@@ -3,56 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이터 삭제 요청</title>
+    <title>계정 삭제 요청</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
         }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f1f3f4;
+            border-radius: 4px;
+            border-left: 4px solid #4285f4;
+        }
+        
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+        
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
         }
-        input, textarea {
+        
+        .required {
+            color: #d73a49;
+        }
+        
+        input, select, textarea {
             width: 100%;
-            padding: 8px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s;
         }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4285f4;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .account-info {
+            background-color: #fafafa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
         button {
-            background-color: #4CAF50;
+            background-color: #dc3545;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 24px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #c82333;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>데이터 삭제 요청</h1>
-    <p>앱에서 귀하의 데이터 삭제를 요청하려면 아래 양식을 작성해주세요.</p>
-    
-    <form action="https://formsubmit.co/rhslvkf@gmail.com" method="POST">
-        <div class="form-group">
-            <label for="nickname">닉네임</label>
-            <input type="text" id="nickname" name="nickname" required>
+    <div class="container">
+        <h1>계정 삭제 요청</h1>
+        
+        <div class="description">
+            <strong>계정 삭제 안내</strong><br>
+            앱에서 계정을 완전히 삭제하려면 아래 양식을 작성해 주세요. 삭제된 데이터는 복구할 수 없으며, 처리까지 최대 30일이 소요될 수 있습니다.
         </div>
         
-        <div class="form-group">
-            <label for="device_id">디바이스 ID (알고 있는 경우)</label>
-            <input type="text" id="device_id" name="device_id">
+        <div class="warning">
+            ⚠️ <strong>주의:</strong> 계정 삭제 시 모든 데이터가 영구적으로 삭제되며 복구가 불가능합니다.
         </div>
         
-        <button type="submit">삭제 요청 제출</button>
-        
-        <!-- FormSubmit 설정 -->
-        <input type="hidden" name="_subject" value="앱 데이터 삭제 요청">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://rhslvkf.github.io/data-deletion/thanks.html">
-    </form>
+        <form action="https://formsubmit.co/rhslvkf@gmail.com" method="POST">
+            <div class="form-group">
+                <label for="account_type">계정 타입 <span class="required">*</span></label>
+                <select id="account_type" name="account_type" required onchange="updateAccountInfo()">
+                    <option value="">선택해 주세요</option>
+                    <option value="google">구글 로그인</option>
+                    <option value="apple">애플 로그인</option>
+                    <option value="guest">게스트 계정</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="account_identifier">계정 식별 정보 <span class="required">*</span></label>
+                <input type="text" id="account_identifier" name="account_identifier" required placeholder="계정 타입을 먼저 선택해 주세요">
+                <div class="account-info" id="account_info" style="display: none;">
+                    <div class="help-text" id="help_text"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="device_id">디바이스 ID (선택사항)</label>
+                <input type="text" id="device_id" name="device_id" placeholder="알고 있는 경우 입력해 주세요">
+                <div class="help-text">앱 설정에서 확인할 수 있습니다. 계정 식별에 도움이 됩니다.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="deletion_reason">삭제 사유 (선택사항)</label>
+                <textarea id="deletion_reason" name="deletion_reason" placeholder="계정을 삭제하는 이유를 알려주시면 서비스 개선에 도움이 됩니다."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="additional_info">추가 정보 (선택사항)</label>
+                <textarea id="additional_info" name="additional_info" placeholder="계정 식별에 도움이 될 수 있는 추가 정보가 있다면 입력해 주세요."></textarea>
+            </div>
+            
+            <button type="submit">계정 삭제 요청 제출</button>
+            
+            <!-- FormSubmit 설정 -->
+            <input type="hidden" name="_subject" value="앱 계정 삭제 요청">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://rhslvkf.github.io/data-deletion/thanks.html">
+        </form>
+    </div>
+
+    <script>
+        function updateAccountInfo() {
+            const accountType = document.getElementById('account_type').value;
+            const accountIdentifier = document.getElementById('account_identifier');
+            const accountInfo = document.getElementById('account_info');
+            const helpText = document.getElementById('help_text');
+            
+            if (accountType === '') {
+                accountIdentifier.placeholder = '계정 타입을 먼저 선택해 주세요';
+                accountInfo.style.display = 'none';
+                return;
+            }
+            
+            accountInfo.style.display = 'block';
+            
+            switch(accountType) {
+                case 'google':
+                    accountIdentifier.placeholder = 'example@gmail.com';
+                    accountIdentifier.type = 'email';
+                    helpText.innerHTML = '구글 계정으로 로그인할 때 사용한 이메일 주소를 입력해 주세요.';
+                    break;
+                case 'apple':
+                    accountIdentifier.placeholder = 'example@icloud.com 또는 Apple ID';
+                    accountIdentifier.type = 'email';
+                    helpText.innerHTML = '애플 계정으로 로그인할 때 사용한 이메일 주소나 Apple ID를 입력해 주세요.';
+                    break;
+                case 'guest':
+                    accountIdentifier.placeholder = '게스트 계정 식별 정보';
+                    accountIdentifier.type = 'text';
+                    helpText.innerHTML = '게스트 계정의 경우 앱에서 생성된 식별 정보나 디바이스 ID를 입력해 주세요. 정확한 정보를 모르시면 아래 추가 정보란에 기억나는 정보를 모두 입력해 주세요.';
+                    break;
+            }
+        }
+    </script>
 </body>
 </html>
