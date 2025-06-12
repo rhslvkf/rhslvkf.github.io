@@ -1,22 +1,228 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>요청이 제출되었습니다</title>
+    <title>Request Submitted</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
+        }
+        
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .lang-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background-color: #4285f4;
+            color: white;
+            border-color: #4285f4;
+        }
+        
+        .lang-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .lang-btn.active:hover {
+            background-color: #3367d6;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .main-message {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .process-info {
+            background-color: #f1f3f4;
+            padding: 20px;
+            border-radius: 4px;
+            border-left: 4px solid #4285f4;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .process-info h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .process-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .process-info li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+        
+        .contact-info {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff3cd;
+            border-radius: 4px;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .contact-info p {
+            margin: 5px 0;
+            color: #856404;
+        }
+        
+        .back-link {
+            margin-top: 30px;
+        }
+        
+        .back-link a {
+            color: #4285f4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .main-message {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>요청이 제출되었습니다</h1>
-    <p>데이터 삭제 요청이 성공적으로 제출되었습니다. 요청을 검토한 후 처리하겠습니다.</p>
-    <p>요청은 7일 이내에 처리됩니다.</p>
+    <div class="container">
+        <div class="language-toggle">
+            <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+            <button class="lang-btn" onclick="setLanguage('ko')">한국어</button>
+        </div>
+        
+        <div class="success-icon">✅</div>
+        
+        <h1 id="title">Request Submitted Successfully</h1>
+        
+        <p class="main-message" id="main-message">
+            Your account deletion request has been successfully submitted. We will review and process your request promptly.
+        </p>
+        
+        <div class="process-info">
+            <h3 id="process-title">What happens next?</h3>
+            <ul>
+                <li id="process-step1">We will verify your account information and identity</li>
+                <li id="process-step2">Your account and all associated data will be permanently deleted</li>
+            </ul>
+            <p id="timeline"><strong>Processing time:</strong> Up to 30 days from the date of submission</p>
+        </div>
+        
+        <div class="contact-info">
+            <p id="contact-title"><strong>Need help?</strong></p>
+            <p id="contact-text">If you have any questions about your deletion request or need to provide additional information, please contact us at: <strong>rhslvkf@gmail.com</strong></p>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Request Submitted Successfully",
+                mainMessage: "Your account deletion request has been successfully submitted. We will review and process your request promptly.",
+                processTitle: "What happens next?",
+                processStep1: "We will verify your account information and identity",
+                processStep2: "Your account and all associated data will be permanently deleted",
+                processStep3: "You will receive a confirmation email once processing is complete",
+                timeline: "<strong>Processing time:</strong> Up to 30 days from the date of submission",
+                contactTitle: "<strong>Need help?</strong>",
+                contactText: "If you have any questions about your deletion request or need to provide additional information, please contact us at: <strong>rhslvkf@gmail.com</strong>",
+                backLink: "← Go back to previous page"
+            },
+            ko: {
+                title: "요청이 제출되었습니다",
+                mainMessage: "계정 삭제 요청이 성공적으로 제출되었습니다. 요청을 검토한 후 신속하게 처리하겠습니다.",
+                processTitle: "다음 단계는 무엇인가요?",
+                processStep1: "계정 정보와 신원을 확인합니다",
+                processStep2: "계정과 모든 관련 데이터가 영구적으로 삭제됩니다",
+                processStep3: "처리가 완료되면 확인 이메일을 보내드립니다",
+                timeline: "<strong>처리 기간:</strong> 제출일로부터 최대 30일",
+                contactTitle: "<strong>도움이 필요하신가요?</strong>",
+                contactText: "삭제 요청에 대한 질문이 있거나 추가 정보를 제공해야 하는 경우, 다음 이메일로 연락해 주세요: <strong>rhslvkf@gmail.com</strong>",
+                backLink: "← 이전 페이지로 돌아가기"
+            }
+        };
+
+        function setLanguage(lang) {
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update all text content
+            const t = translations[lang];
+            document.getElementById('title').innerText = t.title;
+            document.getElementById('main-message').innerText = t.mainMessage;
+            document.getElementById('process-title').innerText = t.processTitle;
+            document.getElementById('process-step1').innerText = t.processStep1;
+            document.getElementById('process-step2').innerText = t.processStep2;
+            document.getElementById('process-step3').innerText = t.processStep3;
+            document.getElementById('timeline').innerHTML = t.timeline;
+            document.getElementById('contact-title').innerHTML = t.contactTitle;
+            document.getElementById('contact-text').innerHTML = t.contactText;
+            document.getElementById('back-link').innerText = t.backLink;
+            
+            // Update page title
+            document.title = lang === 'en' ? 'Request Submitted' : '요청이 제출되었습니다';
+        }
+
+        // Initialize with English
+        document.addEventListener('DOMContentLoaded', function() {
+            setLanguage('en');
+        });
+    </script>
 </body>
 </html>
